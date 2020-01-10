@@ -1,0 +1,164 @@
+
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
+<html>
+    <head>
+        <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+            <title>移动端扫描二维码</title>
+            </head>
+    <script type="text/javascript">
+        
+        function openIM(){
+            iExoaAction.openOAIM({iObjectId:1519,user_id:749,account:"chiml",name:"池沐霖",name_eng:"",nick_name:"",signature:"",img_url:"",office_phone:"",office_phone_ext:"",fax:"",home_phone:"",work_org:"京华信息科技股份有限公司",work_dept:"产品研发中心",qq:"",wechat:"",url:"",email:"",ph_email:"",microblog1:"",microblog2:"",facebook:"",twitter:"",gender:0,birthday:null,nation:"",graduate_school:"",degree_level:0,interest:"",educate_experience:"10",work_experience:"部门副经理",org_address:"",home_address:"",add_type_id:1,create_date:"2014-05-14 11:11:11",create_id:845,last_modified_date:"2015-02-14 11:11:11",remark:"",priority:30000006,unit_id:510,dept_id:562,add_type:1,full_spell:"chimulin",short_spell:"cml",unit_name:null});
+        }
+    
+    /**
+     * 申请短信验证
+     */
+    function openSMSByPhoneNum(phoneNum){
+        iExoaAction.openSMSCodeByPhoneNum(phoneNum);
+    }
+    
+    /**
+     * 校验短信
+     */
+    function openSMSVerityByCode(phoneNum){
+        var smsCode = document.getElementById("smsCode").value;
+        var idCard = document.getElementById("idCard").value;
+        iExoaAction.openSMSVerity(phoneNum,smsCode,idCard);
+    }
+    
+    /**
+     * 申请证书
+     */
+    function openApplyCertByInfo(){
+        var idCard = document.getElementById("idCard").value;
+        iExoaAction.openApplyCertificate('周经伟','15521151993','zhoujw@excellence.com.cn','jh','440106',idCard);
+    }
+    
+    /**
+     * 获取证书列表
+     */
+    function openGetCertList(){
+        var certList = iExoaAction.openGetCertificateList();
+        alert("列表为："+certList);
+        var tObj = document.getElementById('certList');
+        tObj.value = certList;
+    }
+    
+    /**
+     * 根据uuid下载证书
+     * isDownloadScuess : 0=失败，1=成功，2=超时2分钟需要短信校验
+     */
+    function openDownloadCertByUUID(){
+        var uuid = document.getElementById("uuid").value;//证书的uuid
+        if (uuid == null){
+            alert('请选择证书');
+        }
+        var isDownloadScuess = iExoaAction.openDownloadCertificateByUUID(uuid);
+        alert(isDownloadScuess);
+    }
+    
+    /**
+     * 根据uuid管理证书
+     * type (delete：删除证书, update:更新证书（先判断是否过期，未过期则不进行更新）, modifyPin:修改证书pin , modifyName:修改证书名)
+     */
+    function openManageCertByUUID(type){
+        var uuid = document.getElementById("uuid").value;//证书的uuid
+        iExoaAction.openManageCertificateByUUID(uuid,type);
+    }
+    
+    /**
+     * 根据areaName获取code
+     */
+    function openGetAreaCodeByName(areaName){
+        var areaCode = iExoaAction.openGetAreaCodeByAreaName(areaName);
+        alert("区代号:"+areaCode);
+    }
+    
+    /**
+     * 根据获取area名列表
+     * provinceName:省
+     * cityName:市
+     * type (0：省，1:市，2:区)
+     */
+    function openAreaListChange(provinceName,cityName,type){
+        var areaList = iExoaAction.openAreaNameListChange(provinceName,cityName,type);
+        alert("列表为："+areaList);
+    }
+    
+    /**
+     * 选择证书签发,调用原生接口获取签名证书并发送加签数据
+     * uuid 证书uuid值
+     * msg 需要签名的字符串
+     * sendUrl 发送结果的URL，如http://localhost/exoa/sendSignDocument.do?signDocumentStr=$signDocumentStr&certificate=$certificate
+     */
+    function openSendCertificateAndSignStrByUUID(){
+        var uuid = document.getElementById("uuid").value;//证书的uuid
+        var msg = document.getElementById("msg").value;//要签名的字符串
+        iExoaAction.openSendSignDocument(uuid,msg);
+    }
+    
+    /**
+     * 检查用户是否拥有证书，拥有则返回详细信息
+     */
+    function openCheckUserCertificationToInfo(){
+        var info = iExoaAction.openCheckUserCert();
+        alert("用户拥有的证书为:"+info);
+        var tObj = document.getElementById('certInfo');
+        tObj.value = info;
+    }
+    
+    function signCallBack(result){
+        alert(result);
+    }
+    
+    function test(){
+
+        window.webkit.messageHandlers.jsCallOC.postMessage(666);
+
+    }
+    function test2(){
+        window.webkit.messageHandlers.jsCallOC2.postMessage(88);
+    }
+    /**
+     * openWebModule
+     * function(title,reqeustID,webUrl,ondidCloseCallBackOnly
+     */
+    function openWebModuleFunc(){
+        iExoaAction.openWebModule("title","reqeustID","url",callbackfun);
+    }
+    </script>
+    <body>
+        短信验证码：<input id="smsCode" name="smsCode" value=""/><br>
+        生份证号码：<input id="idCard" name="idCard" value="440784199005215114"/><br>
+        待签名的字符串：<input id="msg" name="msg" value="测试数据"/><br>
+        证书uuid：<input id="uuid" name="uuid" value=""/><br>
+        
+        证书为：<textarea id="certInfo" name="certInfo" rows="5" cols="50"></textarea><br>
+        
+        证书列表：<textarea id="certList" name="certList" rows="5" cols="50"></textarea><br>
+        
+        <button onclick="openSMSByPhoneNum('15521151993');">申请短信验证</button><br>
+        <button onclick="openSMSVerityByCode('15521151993');">校验短信</button><br>
+        <button onclick="openApplyCertByInfo();">申请证书</button><br>
+        <button onclick="openGetCertList();">获取证书列表</button><br>
+        <button onclick="openSendCertificateAndSignStrByUUID();">公文签发</button><br>
+        <button onclick="openDownloadCertByUUID();">下载证书</button><br>
+        
+        <button onclick="openCheckUserCertificationToInfo()">查看用户证书</button><br>
+        
+        <button onclick="openManageCertByUUID('modifyPin');">修改证书Pin</button><br>
+        <button onclick="openManageCertByUUID('delete');">删除证书</button><br>
+        <button onclick="openManageCertByUUID('update');">更新证书</button><br>
+        <button onclick="openManageCertByUUID('modifyName');">修改证书名字</button><br>
+        
+        <button onclick="openAreaListChange('','','0');">省</button><br>
+        <button onclick="openAreaListChange('广东省','','1')">市</button><br>
+        <button onclick="openAreaListChange('广东省','广州市','2')">区</button><br>
+        <button onclick="openGetAreaCodeByName('天河区')">area代号</button><br>
+        
+        <button onclick="test();">  test  </button><br>
+        <button onclick="test2();">  test2  </button><br>
+
+    </body>
+</html>
